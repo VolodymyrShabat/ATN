@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  golang_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: golang_server
+    ports:
+      - "8089:8089"
+    depends_on:
+      - mongodb
+    environment:
+      SERVER_PORT: 8089
+      DOMAIN: "0.0.0.0:"
+      JWT_SECRET_KEY: "secret_key"
+      HASH_SALT: "fdGfdJHsGgr424rFFffeFD42rFfre"
+      SMTP_HOST: "in-v3.mailjet.com"
+      SMTP_PASS: "098873819758946d78149f9d44a1b772"
+      SMTP_PORT: "587"
+      SMTP_USER: "f4f28d5e5a2d276178dbb70c5bd76541"
+      EMAIL_FROM: "shabatvolodymyr@gmail.com"
+
+volumes:
+  mongodb_data:
